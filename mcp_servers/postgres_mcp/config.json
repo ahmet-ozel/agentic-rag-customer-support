@@ -1,0 +1,67 @@
+{
+  "name": "postgres-mcp",
+  "description": "PostgreSQL müşteri veritabanına salt okunur erişim sağlayan MCP sunucusu",
+  "version": "1.0.0",
+  "transport": "stdio",
+  "connection": {
+    "host": "${POSTGRES_HOST:-localhost}",
+    "port": "${POSTGRES_PORT:-5432}",
+    "database": "${POSTGRES_DB:-agentdesk}",
+    "user": "${POSTGRES_READONLY_USER:-agentdesk_readonly}",
+    "password": "${POSTGRES_READONLY_PASSWORD}",
+    "ssl_mode": "prefer",
+    "connection_timeout": 10,
+    "pool_size": 5
+  },
+  "security": {
+    "read_only": true,
+    "allowed_operations": ["SELECT"],
+    "blocked_operations": ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE", "TRUNCATE", "GRANT", "REVOKE", "EXECUTE", "COPY"],
+    "parameterized_queries": true,
+    "max_query_length": 10000,
+    "query_timeout_seconds": 30
+  },
+  "allowed_tables": [
+    "customers",
+    "plans",
+    "subscriptions",
+    "support_tickets",
+    "invoices",
+    "activity_log",
+    "products",
+    "faq_categories"
+  ],
+  "tools": [
+    {
+      "name": "query_database",
+      "description": "PostgreSQL veritabanında salt okunur SQL sorgusu çalıştırır. Yalnızca SELECT sorguları kabul edilir.",
+      "parameters": {
+        "query": {
+          "type": "string",
+          "description": "Çalıştırılacak SQL SELECT sorgusu"
+        },
+        "params": {
+          "type": "array",
+          "description": "Parametreli sorgu için değerler (SQL injection koruması)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "list_tables",
+      "description": "Erişilebilir veritabanı tablolarını listeler"
+    },
+    {
+      "name": "describe_table",
+      "description": "Belirtilen tablonun sütun yapısını döndürür",
+      "parameters": {
+        "table_name": {
+          "type": "string",
+          "description": "Yapısı sorgulanacak tablo adı"
+        }
+      }
+    }
+  ]
+}

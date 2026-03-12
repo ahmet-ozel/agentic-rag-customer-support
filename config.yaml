@@ -1,0 +1,209 @@
+app:
+  name: "AgentDesk"
+  version: "1.0.0"
+  host: "0.0.0.0"
+  port: 8000
+  max_agent_iterations: 10
+
+# LLM configuration
+# default_provider selects the active provider: vllm | openai | anthropic | google | ollama
+# Multiple providers can be defined simultaneously (e.g. for fallback).
+llm:
+  default_provider: "openai"
+
+  providers:
+    vllm:
+      base_url: "${VLLM_BASE_URL}"
+      model: "Qwen/Qwen3-32B"
+      api_key: null
+      max_tokens: 4096
+      temperature: 0.7
+      timeout: 60
+
+    openai:
+      base_url: "https://api.openai.com/v1"
+      model: "gpt-4o-mini"
+      api_key: "${OPENAI_API_KEY}"
+      max_tokens: 4096
+      temperature: 0.7
+      timeout: 60
+
+    anthropic:
+      base_url: "https://api.anthropic.com/v1"
+      model: "claude-haiku-4-5"
+      api_key: "${ANTHROPIC_API_KEY}"
+      max_tokens: 4096
+      temperature: 0.7
+      timeout: 60
+
+    google:
+      base_url: "https://generativelanguage.googleapis.com/v1beta/openai"
+      model: "gemini-2.5-flash"
+      api_key: "${GOOGLE_API_KEY}"
+      max_tokens: 4096
+      temperature: 0.7
+      timeout: 60
+
+    ollama:
+      base_url: "http://localhost:11434/v1"
+      model: "llama3.2"
+      api_key: null
+      max_tokens: 4096
+      temperature: 0.7
+      timeout: 120
+
+  # Tiered LLM: cheap model for routing, powerful model for generation
+  tiered:
+    enabled: false
+    routing_provider: "openai"
+    routing_model: "gpt-4o-mini"
+
+# Customer database configuration
+# db_provider selects the active backend: postgresql | neon | supabase
+#   postgresql : self-hosted or Docker Postgres
+#   neon       : serverless cloud Postgres (neon.tech) — free tier available
+#   supabase   : cloud Postgres + BaaS (supabase.com) — free tier available
+database:
+  db_provider: "postgresql"
+
+  providers:
+    postgresql:
+      host: "${POSTGRES_HOST}"
+      port: "${POSTGRES_PORT}"
+      database: "${POSTGRES_DB}"
+      user: "${POSTGRES_READONLY_USER}"
+      password: "${POSTGRES_READONLY_PASSWORD}"
+      ssl_mode: "prefer"
+
+    neon:
+      # Settings > Connection Details > Connection string
+      connection_string: "${NEON_DATABASE_URL}"
+      ssl_mode: "require"
+
+    supabase:
+      # Settings > Database > Connection string (Transaction pooler recommended)
+      connection_string: "${SUPABASE_DATABASE_URL}"
+      access_token: "${SUPABASE_ACCESS_TOKEN}"
+      project_ref: "${SUPABASE_PROJECT_REF}"
+      ssl_mode: "require"
+
+embedding:
+  model: "bge-m3"
+  provider: "local"   # local | openai | voyage | cohere
+  base_url: null
+  api_key: null
+  dimension: 1024
+
+vector_store:
+  provider: "qdrant"   # qdrant | milvus | chroma | pgvector
+  host: "localhost"
+  port: 6333
+  collection_name: "documents"
+  hybrid_search: false
+  reranker:
+    enabled: false
+    model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    top_k: 5
+
+chunking:
+  strategy: "recursive"   # recursive | semantic | document_aware
+  chunk_size: 512
+  chunk_overlap: 50
+
+# MCP servers — enable the one matching your db_provider
+mcp_servers:
+  postgres_mcp:
+    enabled: true
+    transport: "stdio"
+    command: "python"
+    args: ["-m", "mcp_servers.postgres_mcp"]
+    env:
+      POSTGRES_HOST: "${POSTGRES_HOST}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_READONLY_USER: "${POSTGRES_READONLY_USER}"
+      POSTGRES_READONLY_PASSWORD: "${POSTGRES_READONLY_PASSWORD}"
+
+  neon_mcp:
+    enabled: false   # set true when db_provider: neon
+    transport: "stdio"
+    command: "npx"
+    args: ["-y", "@neondatabase/mcp-server-neon", "start"]
+    env:
+      NEON_API_KEY: "${NEON_API_KEY}"
+
+  supabase_mcp:
+    enabled: false   # set true when db_provider: supabase
+    transport: "stdio"
+    command: "npx"
+    args: ["-y", "@supabase/mcp-server-supabase@latest"]
+    env:
+      SUPABASE_ACCESS_TOKEN: "${SUPABASE_ACCESS_TOKEN}"
+
+  qdrant_mcp:
+    enabled: true
+    transport: "stdio"
+    command: "python"
+    args: ["-m", "mcp_servers.qdrant_mcp"]
+    env:
+      QDRANT_HOST: "localhost"
+      QDRANT_PORT: "6333"
+
+  docling_mcp:
+    enabled: true
+    transport: "stdio"
+    command: "python"
+    args: ["-m", "mcp_servers.docling_mcp"]
+    env: {}
+
+  paddleocr_mcp:
+    enabled: false
+    transport: "stdio"
+    command: "python"
+    args: ["-m", "mcp_servers.paddleocr_mcp"]
+    env: {}
+
+  markitdown_mcp:
+    enabled: true
+    transport: "stdio"
+    command: "python"
+    args: ["-m", "mcp_servers.markitdown_mcp"]
+    env: {}
+
+intent_router:
+  categories:
+    chitchat:
+      utterances: ["hello", "hi", "hey", "good morning", "how are you"]
+      action: "direct_response"
+      response: "Hello! How can I help you?"
+
+    faq_query:
+      utterances: ["how do I", "what is", "help", "FAQ", "guide"]
+      action: "agent_loop"
+      response: null
+
+    customer_query:
+      utterances: ["customer info", "subscription status", "invoice", "support ticket"]
+      action: "agent_loop"
+      response: null
+
+    document_upload:
+      utterances: ["upload document", "upload file", "add PDF", "attach file"]
+      action: "agent_loop"
+      response: null
+
+    document_query:
+      utterances: ["search document", "what does the report say", "find in archive"]
+      action: "agent_loop"
+      response: null
+
+session:
+  max_messages: 50
+  timeout_minutes: 30
+
+logging:
+  log_conversations: true
+  log_tool_calls: true
+  log_file: "./logs/agentdesk.log"
+  track_token_usage: true
+  cost_log_file: "./logs/cost.log"
