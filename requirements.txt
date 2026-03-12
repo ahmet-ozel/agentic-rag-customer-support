@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+openai
+httpx
+qdrant-client
+sentence-transformers
+hypothesis
+pytest
+pytest-asyncio
+gradio
+watchfiles
+pyyaml
