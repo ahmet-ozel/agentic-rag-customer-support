@@ -7,36 +7,36 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/Tests-224%20passing-brightgreen)]()
 
-Müşteri destek otomasyonu için üretim kalitesinde bir **Agentic RAG** (Retrieval-Augmented Generation) platformu. LLM'ler, MCP sunucuları, vektör veritabanları ve doküman pipeline'ını yapılandırma odaklı (config-driven) bir mimaride birleştiren referans implementasyon.
+A production-grade **Agentic RAG** (Retrieval-Augmented Generation) platform for customer support automation. A reference implementation that brings together LLMs, MCP servers, vector databases and a document pipeline in a config-driven architecture.
 
 ---
 
-## İçindekiler
+## Table of Contents
 
-- [Mimari](#mimari)
-- [Özellikler](#özellikler)
-- [Hızlı Başlangıç](#hızlı-başlangıç)
-- [Kurulum](#kurulum)
-- [Yapılandırma](#yapılandırma)
-- [API Referansı](#api-referansı)
-- [Proje Yapısı](#proje-yapısı)
-- [Geliştirme](#geliştirme)
-- [Test](#test)
-- [Docker ile Dağıtım](#docker-ile-dağıtım)
-- [Desteklenen Sağlayıcılar](#desteklenen-sağlayıcılar)
-- [Katkıda Bulunma](#katkıda-bulunma)
-- [Lisans](#lisans)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
+- [Project Structure](#project-structure)
+- [Development](#development)
+- [Testing](#testing)
+- [Docker Deployment](#docker-deployment)
+- [Supported Providers](#supported-providers)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
-## Mimari
+## Architecture
 
 ```
-Kullanıcı İsteği
+User Request
      │
      ▼
 ┌─────────────────────────────────────────────────────────┐
-│                    FastAPI Sunucusu                      │
+│                    FastAPI Server                        │
 │                                                         │
 │  ┌──────────────┐    ┌──────────────────────────────┐  │
 │  │ Intent Router│───▶│         Agent Loop            │  │
@@ -48,7 +48,7 @@ Kullanıcı İsteği
 │  └──────────────┘                          │            │
 │                                            ▼            │
 │  ┌──────────────┐    ┌──────────────────────────────┐  │
-│  │Reference     │    │         MCP Sunucuları        │  │
+│  │Reference     │    │         MCP Servers           │  │
 │  │Store (TTL)   │    │  postgres-mcp │ qdrant-mcp   │  │
 │  └──────────────┘    │  docling-mcp  │ paddleocr-mcp│  │
 └─────────────────────────────────────────────────────────┘
@@ -56,122 +56,122 @@ Kullanıcı İsteği
      ▼
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │  PostgreSQL  │    │   Qdrant    │    │  vLLM / API │
-│  (Müşteri    │    │  (Vektör    │    │  (LLM       │
-│   Veritabanı)│    │   Deposu)   │    │   Backend)  │
+│  (Customer   │    │  (Vector    │    │  (LLM       │
+│   Database)  │    │   Store)    │    │   Backend)  │
 └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-### Temel Tasarım Kararları
+### Key Design Decisions
 
-- **Birleşik LLM Arayüzü:** Tüm LLM sağlayıcıları (vLLM, OpenAI, Anthropic, Google, Ollama) tek bir OpenAI-uyumlu istemci üzerinden erişilir
-- **MCP Protokolü:** Tüm harici I/O işlemleri MCP sunucuları üzerinden yönetilir — agent loop saf kalır
-- **Reference Store:** Büyük araç sonuçları TTL'li bir bellekte saklanarak token taşması önlenir
-- **Config-Driven:** `config.yaml` üzerinden tüm sağlayıcılar kod değişikliği olmadan değiştirilebilir
-- **Kademeli LLM:** Maliyet optimizasyonu için yönlendirmede ucuz, yanıt üretiminde güçlü model kullanılır
-
----
-
-## Özellikler
-
-- **Esnek LLM Backend** — vLLM (yerel), OpenAI, Anthropic, Google, Ollama; maliyet optimizasyonu için kademeli yönlendirme
-- **Çoklu Vektör Deposu** — Qdrant (varsayılan), Milvus, Chroma, pgvector'e genişletilebilir
-- **MCP Sunucu Yönetimi** — stdio ve SSE transport, otomatik yeniden başlatma, sağlık izleme
-- **Doküman Pipeline** — yükleme → ayrıştırma → parçalama → gömme → depolama, yapılandırılabilir chunking stratejileri
-- **Niyet Yönlendirme** — TF-IDF semantik sınıflandırma, chitchat agent loop'u atlar
-- **Oturum Yönetimi** — bellekte konuşma geçmişi, TTL ve mesaj limiti
-- **Reference Store** — büyük araç sonuçları `ref_xxx` koduyla saklanarak bağlam taşması önlenir
-- **Gradio UI** — sohbet arayüzü, doküman yükleme, MCP durumu ve istatistik panelleri
-- **Tam İzlenebilirlik** — konuşmalar, token kullanımı ve araç çağrıları için yapılandırılmış JSON logları
-- **Çoklu Veritabanı Desteği** — PostgreSQL (self-hosted), Neon (serverless), Supabase (BaaS)
+- **Unified LLM Interface:** All LLM providers (vLLM, OpenAI, Anthropic, Google, Ollama) are accessed through a single OpenAI-compatible client
+- **MCP Protocol:** All external I/O is managed through MCP servers — the agent loop stays pure
+- **Reference Store:** Large tool results are kept in a TTL-based store to prevent token overflow
+- **Config-Driven:** All providers can be swapped via `config.yaml` with no code changes
+- **Tiered LLM:** A cheap model is used for routing and a strong model for response generation, optimizing cost
 
 ---
 
-## Hızlı Başlangıç
+## Features
 
-### Gereksinimler
+- **Flexible LLM Backend** — vLLM (local), OpenAI, Anthropic, Google, Ollama; tiered routing for cost optimization
+- **Multiple Vector Stores** — Qdrant (default), extensible to Milvus, Chroma, pgvector
+- **MCP Server Management** — stdio and SSE transport, auto-restart, health monitoring
+- **Document Pipeline** — upload → parse → chunk → embed → store, with configurable chunking strategies
+- **Intent Routing** — TF-IDF semantic classification; chitchat bypasses the agent loop
+- **Session Management** — in-memory conversation history with TTL and message limits
+- **Reference Store** — large tool results stored under a `ref_xxx` key to prevent context overflow
+- **Gradio UI** — chat interface, document upload, MCP status and statistics panels
+- **Full Observability** — structured JSON logs for conversations, token usage and tool calls
+- **Multi-Database Support** — PostgreSQL (self-hosted), Neon (serverless), Supabase (BaaS)
+
+---
+
+## Quick Start
+
+### Requirements
 
 - Python 3.11+
 - Docker & Docker Compose
-- (Opsiyonel) NVIDIA GPU — yerel vLLM için
+- (Optional) NVIDIA GPU — for local vLLM
 
-### 1. Klonla ve yapılandır
+### 1. Clone and configure
 
 ```bash
 git clone https://github.com/ahmet-ozel/agentdesk.git
 cd agentdesk
 cp .env.example .env
-# .env dosyasını API anahtarlarınız ve veritabanı şifrelerinizle düzenleyin
+# Edit .env with your API keys and database passwords
 ```
 
-### 2. Servisleri başlat
+### 2. Start the services
 
 ```bash
-# CPU / bulut LLM modu
+# CPU / cloud LLM mode
 docker compose up -d
 
-# GPU modu (vLLM dahil)
+# GPU mode (includes vLLM)
 docker compose --profile gpu up -d
 ```
 
-### 3. Doğrula
+### 3. Verify
 
 ```bash
 curl http://localhost:8000/health
 # {"status": "ok"}
 ```
 
-### 4. Arayüzü aç
+### 4. Open the UI
 
-Gradio arayüzü için `http://localhost:7860` adresine gidin veya REST API'yi doğrudan kullanın.
+Go to `http://localhost:7860` for the Gradio interface, or use the REST API directly.
 
 ---
 
-## Kurulum
+## Installation
 
-### Yerel Geliştirme Ortamı
+### Local Development Environment
 
 ```bash
-# Sanal ortam oluştur
+# Create a virtual environment
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# Bağımlılıkları yükle
+# Install dependencies
 pip install -r requirements.txt
 
-# Ortam değişkenlerini ayarla
+# Set environment variables
 cp .env.example .env
-# .env dosyasını düzenle
+# Edit .env
 
-# Sunucuyu başlat (Qdrant + PostgreSQL çalışıyor olmalı)
+# Start the server (Qdrant + PostgreSQL must be running)
 uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 
-# Gradio UI'ı başlat
+# Start the Gradio UI
 python frontend/gradio_app.py
 ```
 
-### Makefile Komutları
+### Makefile Commands
 
 ```bash
-make help          # Tüm komutları listele
-make dev           # FastAPI sunucusunu hot-reload ile başlat
-make ui            # Gradio UI'ı başlat
-make test          # Tüm testleri çalıştır
-make test-unit     # Sadece birim testleri
-make test-int      # Sadece entegrasyon testleri
-make lint          # Ruff linter çalıştır
-make docker-up     # Tüm servisleri başlat (CPU modu)
-make docker-gpu    # vLLM dahil tüm servisleri başlat (GPU modu)
-make docker-down   # Tüm servisleri durdur
-make clean         # __pycache__ ve .pytest_cache temizle
+make help          # List all commands
+make dev           # Start the FastAPI server with hot-reload
+make ui            # Start the Gradio UI
+make test          # Run all tests
+make test-unit     # Unit tests only
+make test-int      # Integration tests only
+make lint          # Run the Ruff linter
+make docker-up     # Start all services (CPU mode)
+make docker-gpu    # Start all services including vLLM (GPU mode)
+make docker-down   # Stop all services
+make clean         # Clean __pycache__ and .pytest_cache
 ```
 
 ---
 
-## Yapılandırma
+## Configuration
 
-Tüm davranış `config.yaml` dosyasından kontrol edilir. Gizli bilgiler `.env` dosyasından `${ENV_VAR}` yer tutucuları ile yüklenir.
+All behavior is controlled from `config.yaml`. Secrets are loaded from `.env` via `${ENV_VAR}` placeholders.
 
-### LLM Yapılandırması
+### LLM Configuration
 
 ```yaml
 llm:
@@ -193,16 +193,16 @@ llm:
   tiered:
     enabled: true
     routing_provider: openai
-    routing_model: gpt-4o-mini    # Yönlendirme için ucuz model
+    routing_model: gpt-4o-mini    # Cheap model for routing
 ```
 
-### Veritabanı Yapılandırması
+### Database Configuration
 
-AgentDesk üç farklı veritabanı sağlayıcısını destekler. `config.yaml` → `database.db_provider` ile aktif sağlayıcıyı seçin.
+AgentDesk supports three different database providers. Select the active one via `config.yaml` → `database.db_provider`.
 
-#### Seçenek 1: PostgreSQL (Self-Hosted / Docker)
+#### Option 1: PostgreSQL (Self-Hosted / Docker)
 
-Docker Compose ile otomatik başlatılır. Ek yapılandırma gerekmez.
+Started automatically via Docker Compose. No extra configuration needed.
 
 ```yaml
 # config.yaml
@@ -224,25 +224,25 @@ POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_DB=agentdesk
 POSTGRES_READONLY_USER=agentdesk_readonly
-POSTGRES_READONLY_PASSWORD=güvenli_şifre
+POSTGRES_READONLY_PASSWORD=secure_password
 DB_PASSWORD=changeme
 ```
 
 ```bash
-# Servisleri başlat (PostgreSQL + Qdrant + AgentDesk)
+# Start services (PostgreSQL + Qdrant + AgentDesk)
 docker compose up -d
 ```
 
-#### Seçenek 2: Neon (Serverless — Ücretsiz Plan Mevcut)
+#### Option 2: Neon (Serverless — Free Plan Available)
 
-[Neon](https://neon.tech), serverless PostgreSQL hizmetidir. Ücretsiz planı 0.5 GB depolama ve otomatik ölçeklendirme sunar.
+[Neon](https://neon.tech) is a serverless PostgreSQL service. Its free plan offers 0.5 GB storage and auto-scaling.
 
-Kurulum adımları:
+Setup steps:
 
-1. [neon.tech](https://neon.tech) adresinden hesap oluşturun
-2. Yeni bir proje oluşturun
-3. Dashboard → Connection Details → Connection string'i kopyalayın
-4. `.env` dosyasını doldurun:
+1. Create an account at [neon.tech](https://neon.tech)
+2. Create a new project
+3. Dashboard → Connection Details → copy the connection string
+4. Fill in `.env`:
 
 ```bash
 # .env
@@ -250,7 +250,7 @@ NEON_DATABASE_URL=postgresql://neondb_owner:abc123@ep-cool-name-123456.us-east-2
 NEON_API_KEY=napi_abc123...
 ```
 
-5. `config.yaml`'ı güncelleyin:
+5. Update `config.yaml`:
 
 ```yaml
 # config.yaml
@@ -261,7 +261,7 @@ database:
       connection_string: ${NEON_DATABASE_URL}
       ssl_mode: require
 
-# MCP sunucularını güncelle — neon_mcp'yi etkinleştir, postgres_mcp'yi devre dışı bırak
+# Update MCP servers — enable neon_mcp, disable postgres_mcp
 mcp_servers:
   postgres_mcp:
     enabled: false
@@ -275,26 +275,26 @@ mcp_servers:
       NEON_API_KEY: ${NEON_API_KEY}
 ```
 
-6. Veritabanı şemasını oluşturun (Neon SQL Editor veya psql ile):
+6. Create the database schema (via the Neon SQL Editor or psql):
 
 ```bash
 psql "${NEON_DATABASE_URL}" -f db/migrations/001_initial_schema.sql
 psql "${NEON_DATABASE_URL}" -f db/seed/seed_data.sql
 ```
 
-#### Seçenek 3: Supabase (BaaS — Ücretsiz Plan Mevcut)
+#### Option 3: Supabase (BaaS — Free Plan Available)
 
-[Supabase](https://supabase.com), açık kaynak Firebase alternatifidir. Ücretsiz planı 500 MB veritabanı, sınırsız API isteği ve dahili auth sunar.
+[Supabase](https://supabase.com) is an open-source Firebase alternative. Its free plan offers a 500 MB database, unlimited API requests and built-in auth.
 
-Kurulum adımları:
+Setup steps:
 
-1. [supabase.com](https://supabase.com) adresinden hesap oluşturun
-2. Yeni bir proje oluşturun (bölge seçin, veritabanı şifresi belirleyin)
-3. Gerekli bilgileri toplayın:
+1. Create an account at [supabase.com](https://supabase.com)
+2. Create a new project (choose a region, set a database password)
+3. Collect the required values:
    - Project Settings → Database → Connection string (Transaction pooler) → `SUPABASE_DATABASE_URL`
    - Project Settings → API → `service_role` key → `SUPABASE_ACCESS_TOKEN`
    - Project Settings → General → Reference ID → `SUPABASE_PROJECT_REF`
-4. `.env` dosyasını doldurun:
+4. Fill in `.env`:
 
 ```bash
 # .env
@@ -303,7 +303,7 @@ SUPABASE_ACCESS_TOKEN=sbp_abc123...
 SUPABASE_PROJECT_REF=abcdefghijklmnop
 ```
 
-5. `config.yaml`'ı güncelleyin:
+5. Update `config.yaml`:
 
 ```yaml
 # config.yaml
@@ -316,7 +316,7 @@ database:
       project_ref: ${SUPABASE_PROJECT_REF}
       ssl_mode: require
 
-# MCP sunucularını güncelle — supabase_mcp'yi etkinleştir, postgres_mcp'yi devre dışı bırak
+# Update MCP servers — enable supabase_mcp, disable postgres_mcp
 mcp_servers:
   postgres_mcp:
     enabled: false
@@ -330,27 +330,27 @@ mcp_servers:
       SUPABASE_ACCESS_TOKEN: ${SUPABASE_ACCESS_TOKEN}
 ```
 
-6. Veritabanı şemasını oluşturun (Supabase SQL Editor veya psql ile):
+6. Create the database schema (via the Supabase SQL Editor or psql):
 
 ```bash
 psql "${SUPABASE_DATABASE_URL}" -f db/migrations/001_initial_schema.sql
 psql "${SUPABASE_DATABASE_URL}" -f db/seed/seed_data.sql
 ```
 
-#### Veritabanı Sağlayıcı Karşılaştırması
+#### Database Provider Comparison
 
-| Özellik | PostgreSQL | Neon | Supabase |
+| Feature | PostgreSQL | Neon | Supabase |
 |---------|-----------|------|----------|
-| Tür | Self-hosted | Serverless | BaaS |
-| Ücretsiz Plan | Docker ile | ✅ 0.5 GB | ✅ 500 MB |
-| Otomatik Ölçeklendirme | ❌ | ✅ | ✅ |
-| Sıfır Soğuk Başlatma | ✅ | ~0.5s | ✅ |
-| Dahili Auth | ❌ | ❌ | ✅ |
-| MCP Sunucusu | postgres_mcp | neon_mcp | supabase_mcp |
-| Kurulum Zorluğu | Kolay (Docker) | Kolay | Kolay |
-| Üretim İçin | ✅ | ✅ | ✅ |
+| Type | Self-hosted | Serverless | BaaS |
+| Free Plan | Via Docker | ✅ 0.5 GB | ✅ 500 MB |
+| Auto-scaling | ❌ | ✅ | ✅ |
+| Zero Cold Start | ✅ | ~0.5s | ✅ |
+| Built-in Auth | ❌ | ❌ | ✅ |
+| MCP Server | postgres_mcp | neon_mcp | supabase_mcp |
+| Setup Difficulty | Easy (Docker) | Easy | Easy |
+| Production Ready | ✅ | ✅ | ✅ |
 
-### Vektör Deposu ve Embedding
+### Vector Store and Embedding
 
 ```yaml
 vector_store:
@@ -374,47 +374,47 @@ chunking:
   chunk_overlap: 50
 ```
 
-Tüm seçenekler için [`config.yaml`](config.yaml) dosyasına bakın.
+See [`config.yaml`](config.yaml) for all options.
 
 ---
 
-## API Referansı
+## API Reference
 
-| Metod | Endpoint | Açıklama |
+| Method | Endpoint | Description |
 |-------|----------|----------|
-| `GET` | `/health` | Sağlık kontrolü |
-| `GET` | `/info` | Sistem bilgisi (versiyon, aktif sağlayıcılar) |
-| `POST` | `/api/v1/chat` | Senkron sohbet |
-| `WS` | `/api/v1/chat/stream` | Akışlı sohbet (WebSocket) |
-| `POST` | `/api/v1/documents` | Doküman yükle ve işle |
-| `GET` | `/api/v1/documents` | Dokümanları listele |
-| `DELETE` | `/api/v1/documents/{id}` | Doküman sil |
-| `GET` | `/api/v1/customers` | Müşteri bilgisi sorgula |
-| `GET` | `/api/v1/config` | Yapılandırmayı görüntüle |
-| `PUT` | `/api/v1/config` | Çalışma zamanında yapılandırma güncelle |
-| `GET` | `/api/v1/mcp/status` | MCP sunucu durumları |
-| `GET` | `/api/v1/stats` | Token kullanımı ve istatistikler |
+| `GET` | `/health` | Health check |
+| `GET` | `/info` | System info (version, active providers) |
+| `POST` | `/api/v1/chat` | Synchronous chat |
+| `WS` | `/api/v1/chat/stream` | Streaming chat (WebSocket) |
+| `POST` | `/api/v1/documents` | Upload and process a document |
+| `GET` | `/api/v1/documents` | List documents |
+| `DELETE` | `/api/v1/documents/{id}` | Delete a document |
+| `GET` | `/api/v1/customers` | Query customer info |
+| `GET` | `/api/v1/config` | View configuration |
+| `PUT` | `/api/v1/config` | Update configuration at runtime |
+| `GET` | `/api/v1/mcp/status` | MCP server statuses |
+| `GET` | `/api/v1/stats` | Token usage and statistics |
 
-İnteraktif API dokümantasyonu: `http://localhost:8000/docs`
+Interactive API docs: `http://localhost:8000/docs`
 
-### Örnek İstekler
+### Example Requests
 
-#### Sohbet
+#### Chat
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Müşteri 1 numaralı müşterinin abonelik durumu nedir?"}'
+  -d '{"message": "What is the subscription status of customer #1?"}'
 ```
 
-#### Doküman Yükleme
+#### Document Upload
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/documents \
-  -F "file=@kullanim_kilavuzu.pdf"
+  -F "file=@user_manual.pdf"
 ```
 
-#### Sistem İstatistikleri
+#### System Statistics
 
 ```bash
 curl http://localhost:8000/api/v1/stats
@@ -422,211 +422,211 @@ curl http://localhost:8000/api/v1/stats
 
 ---
 
-## Proje Yapısı
+## Project Structure
 
 ```
 agentdesk/
 ├── src/
-│   ├── agent/          # AgentLoop — iteratif LLM ↔ MCP araç çağrısı döngüsü
-│   ├── api/            # FastAPI router'ları (chat, documents, customers, config, stats)
+│   ├── agent/          # AgentLoop — iterative LLM ↔ MCP tool-call loop
+│   ├── api/            # FastAPI routers (chat, documents, customers, config, stats)
 │   ├── chunking/       # ChunkingEngine (recursive, semantic, document_aware)
-│   ├── config/         # ConfigManager + Pydantic modelleri
-│   ├── llm/            # LLMClient — birleşik OpenAI-uyumlu arayüz
-│   ├── mcp/            # MCPManager — stdio/SSE yaşam döngüsü yönetimi
-│   ├── models/         # API istek/yanıt şemaları
-│   ├── router/         # IntentRouter — TF-IDF semantik sınıflandırma
-│   ├── session/        # SessionManager — konuşma geçmişi
-│   ├── store/          # ReferenceStore — TTL'li bellek deposu
+│   ├── config/         # ConfigManager + Pydantic models
+│   ├── llm/            # LLMClient — unified OpenAI-compatible interface
+│   ├── mcp/            # MCPManager — stdio/SSE lifecycle management
+│   ├── models/         # API request/response schemas
+│   ├── router/         # IntentRouter — TF-IDF semantic classification
+│   ├── session/        # SessionManager — conversation history
+│   ├── store/          # ReferenceStore — TTL-based memory store
 │   ├── vectorstore/    # VectorStoreAdapter + QdrantVectorStore
-│   ├── logging_config.py  # Yapılandırılmış loglama
-│   └── main.py         # FastAPI uygulama giriş noktası
+│   ├── logging_config.py  # Structured logging
+│   └── main.py         # FastAPI application entry point
 ├── frontend/
-│   └── gradio_app.py   # Gradio sohbet arayüzü
+│   └── gradio_app.py   # Gradio chat interface
 ├── db/
-│   ├── migrations/     # PostgreSQL şema migration'ları
-│   └── seed/           # Örnek veriler
+│   ├── migrations/     # PostgreSQL schema migrations
+│   └── seed/           # Sample data
 ├── mcp_servers/
-│   └── postgres_mcp/   # Salt okunur PostgreSQL MCP sunucu yapılandırması
+│   └── postgres_mcp/   # Read-only PostgreSQL MCP server configuration
 ├── tests/
-│   ├── unit/           # Birim testleri (224 test)
-│   ├── property/       # Property-based testler (Hypothesis)
-│   └── integration/    # Uçtan uca akış testleri
-├── config.yaml         # Ana yapılandırma dosyası
-├── docker-compose.yml  # Çoklu servis orkestrasyonu
+│   ├── unit/           # Unit tests (224 tests)
+│   ├── property/       # Property-based tests (Hypothesis)
+│   └── integration/    # End-to-end flow tests
+├── config.yaml         # Main configuration file
+├── docker-compose.yml  # Multi-service orchestration
 ├── Dockerfile          # Multi-stage build
-├── Makefile            # Geliştirme komutları
-├── requirements.txt    # Python bağımlılıkları
-└── .env.example        # Ortam değişkeni şablonu
+├── Makefile            # Development commands
+├── requirements.txt    # Python dependencies
+└── .env.example        # Environment variable template
 ```
 
 ---
 
-## Geliştirme
+## Development
 
-### Gereksinimler
+### Requirements
 
 - Python 3.11+
-- Docker & Docker Compose (servisler için)
+- Docker & Docker Compose (for services)
 - Git
 
-### Ortam Kurulumu
+### Environment Setup
 
 ```bash
-# Repo'yu klonla
+# Clone the repo
 git clone https://github.com/ahmet-ozel/agentdesk.git
 cd agentdesk
 
-# Sanal ortam
+# Virtual environment
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# Bağımlılıklar
+# Dependencies
 pip install -r requirements.txt
 
-# Ortam değişkenleri
+# Environment variables
 cp .env.example .env
 ```
 
-### Kod Stili
+### Code Style
 
-Proje [Ruff](https://docs.astral.sh/ruff/) linter kullanır:
+The project uses the [Ruff](https://docs.astral.sh/ruff/) linter:
 
 ```bash
 make lint
-# veya
+# or
 ruff check src/ tests/
 ```
 
 ---
 
-## Test
+## Testing
 
-Proje kapsamlı bir test altyapısına sahiptir:
+The project has a comprehensive test suite:
 
 ```bash
-# Tüm testleri çalıştır
+# Run all tests
 make test
-# veya
+# or
 pytest tests/ -v
 
-# Sadece birim testleri
+# Unit tests only
 make test-unit
 
-# Sadece entegrasyon testleri
+# Integration tests only
 make test-int
 ```
 
-### Test Yapısı
+### Test Structure
 
-- **Birim Testleri** (`tests/unit/`): Her bileşen için izole testler
-  - `test_database_config.py` — Veritabanı sağlayıcı yapılandırması (PostgreSQL, Neon, Supabase)
-  - `test_config.py` — Yapılandırma yükleme ve doğrulama
-  - `test_llm_client.py` — LLM istemci işlevselliği
-  - `test_mcp_manager.py` — MCP sunucu yönetimi
-  - `test_intent_router.py` — Niyet sınıflandırma
-  - `test_agent_loop.py` — Agent loop iş akışı
-  - `test_reference_store.py` — Reference store işlemleri
-  - `test_session_manager.py` — Oturum yönetimi
-  - `test_chunking.py` — Doküman parçalama
-  - `test_vectorstore.py` — Vektör deposu işlemleri
-  - `test_api_endpoints.py` — REST API endpoint'leri
-  - `test_schemas.py` — API şema doğrulama
-  - `test_logging_config.py` — Loglama kurulumu
+- **Unit Tests** (`tests/unit/`): Isolated tests for each component
+  - `test_database_config.py` — Database provider configuration (PostgreSQL, Neon, Supabase)
+  - `test_config.py` — Configuration loading and validation
+  - `test_llm_client.py` — LLM client functionality
+  - `test_mcp_manager.py` — MCP server management
+  - `test_intent_router.py` — Intent classification
+  - `test_agent_loop.py` — Agent loop workflow
+  - `test_reference_store.py` — Reference store operations
+  - `test_session_manager.py` — Session management
+  - `test_chunking.py` — Document chunking
+  - `test_vectorstore.py` — Vector store operations
+  - `test_api_endpoints.py` — REST API endpoints
+  - `test_schemas.py` — API schema validation
+  - `test_logging_config.py` — Logging setup
 
-- **Entegrasyon Testleri** (`tests/integration/`): Uçtan uca akış testleri
-  - Sohbet akışı (Intent Router → Agent Loop → LLM → MCP → Yanıt)
-  - Doküman işleme pipeline'ı
-  - Müşteri sorgu akışı
+- **Integration Tests** (`tests/integration/`): End-to-end flow tests
+  - Chat flow (Intent Router → Agent Loop → LLM → MCP → Response)
+  - Document processing pipeline
+  - Customer query flow
 
-- **Property Testleri** (`tests/property/`): Hypothesis ile doğruluk özellikleri
+- **Property Tests** (`tests/property/`): Correctness properties with Hypothesis
 
-### Test Kapsamı
+### Test Coverage
 
-| Modül | Test Sayısı | Durum |
+| Module | Test Count | Status |
 |-------|-------------|-------|
-| Birim Testleri | 216 | ✅ Geçiyor |
-| Entegrasyon Testleri | 8 | ✅ Geçiyor |
-| **Toplam** | **224** | **✅ Tümü Geçiyor** |
+| Unit Tests | 216 | ✅ Passing |
+| Integration Tests | 8 | ✅ Passing |
+| **Total** | **224** | **✅ All Passing** |
 
 ---
 
-## Docker ile Dağıtım
+## Docker Deployment
 
-### Servisler
+### Services
 
-| Servis | Port | Açıklama |
+| Service | Port | Description |
 |--------|------|----------|
-| `agentdesk` | 8000 | FastAPI ana sunucu |
-| `postgres` | 5432 | PostgreSQL müşteri veritabanı |
-| `qdrant` | 6333, 6334 | Qdrant vektör veritabanı |
-| `vllm` (GPU) | 8080 | vLLM yerel çıkarım sunucusu |
+| `agentdesk` | 8000 | FastAPI main server |
+| `postgres` | 5432 | PostgreSQL customer database |
+| `qdrant` | 6333, 6334 | Qdrant vector database |
+| `vllm` (GPU) | 8080 | vLLM local inference server |
 
-### Başlatma
+### Startup
 
 ```bash
-# CPU modu (bulut LLM kullanır)
+# CPU mode (uses cloud LLM)
 docker compose up -d
 
-# GPU modu (yerel vLLM dahil)
+# GPU mode (includes local vLLM)
 docker compose --profile gpu up -d
 
-# Logları izle
+# Follow logs
 docker compose logs -f agentdesk
 
-# Durdur
+# Stop
 docker compose down
 ```
 
-### Kalıcı Veriler
+### Persistent Data
 
-Docker volume'ları ile veriler korunur:
-- `postgres_data` — PostgreSQL veritabanı verileri
-- `qdrant_data` — Qdrant vektör indeksleri
+Data is preserved via Docker volumes:
+- `postgres_data` — PostgreSQL database data
+- `qdrant_data` — Qdrant vector indexes
 
 ---
 
-## Desteklenen Sağlayıcılar
+## Supported Providers
 
-| Kategori | Seçenekler |
+| Category | Options |
 |----------|------------|
 | **LLM** | vLLM, OpenAI, Anthropic, Google, Ollama |
-| **Vektör Deposu** | Qdrant (varsayılan), Milvus, Chroma, pgvector'e genişletilebilir |
-| **Embedding** | bge-m3 (yerel), OpenAI, Voyage, Cohere |
-| **Doküman Parser** | docling-mcp, paddleocr-mcp (MCP yapılandırması ile) |
-| **Müşteri DB** | PostgreSQL, Neon, Supabase |
+| **Vector Store** | Qdrant (default), extensible to Milvus, Chroma, pgvector |
+| **Embedding** | bge-m3 (local), OpenAI, Voyage, Cohere |
+| **Document Parser** | docling-mcp, paddleocr-mcp (via MCP configuration) |
+| **Customer DB** | PostgreSQL, Neon, Supabase |
 
 ---
 
-## Ortam Değişkenleri
+## Environment Variables
 
-| Değişken | Açıklama | Zorunlu |
+| Variable | Description | Required |
 |----------|----------|---------|
-| `OPENAI_API_KEY` | OpenAI API anahtarı | LLM provider=openai ise |
-| `ANTHROPIC_API_KEY` | Anthropic API anahtarı | LLM provider=anthropic ise |
-| `GOOGLE_API_KEY` | Google API anahtarı | LLM provider=google ise |
-| `VLLM_BASE_URL` | vLLM sunucu URL'i | LLM provider=vllm ise |
-| `POSTGRES_HOST` | PostgreSQL host | db_provider=postgresql ise |
-| `POSTGRES_PORT` | PostgreSQL port | db_provider=postgresql ise |
-| `POSTGRES_DB` | Veritabanı adı | db_provider=postgresql ise |
-| `POSTGRES_READONLY_USER` | Salt okunur kullanıcı | db_provider=postgresql ise |
-| `POSTGRES_READONLY_PASSWORD` | Kullanıcı şifresi | db_provider=postgresql ise |
-| `DB_PASSWORD` | PostgreSQL admin şifresi | Docker Compose için |
-| `NEON_DATABASE_URL` | Neon bağlantı dizesi | db_provider=neon ise |
-| `NEON_API_KEY` | Neon API anahtarı | db_provider=neon ise |
-| `SUPABASE_DATABASE_URL` | Supabase bağlantı dizesi | db_provider=supabase ise |
-| `SUPABASE_ACCESS_TOKEN` | Supabase erişim token'ı | db_provider=supabase ise |
-| `SUPABASE_PROJECT_REF` | Supabase proje referans ID'si | db_provider=supabase ise |
+| `OPENAI_API_KEY` | OpenAI API key | If LLM provider=openai |
+| `ANTHROPIC_API_KEY` | Anthropic API key | If LLM provider=anthropic |
+| `GOOGLE_API_KEY` | Google API key | If LLM provider=google |
+| `VLLM_BASE_URL` | vLLM server URL | If LLM provider=vllm |
+| `POSTGRES_HOST` | PostgreSQL host | If db_provider=postgresql |
+| `POSTGRES_PORT` | PostgreSQL port | If db_provider=postgresql |
+| `POSTGRES_DB` | Database name | If db_provider=postgresql |
+| `POSTGRES_READONLY_USER` | Read-only user | If db_provider=postgresql |
+| `POSTGRES_READONLY_PASSWORD` | User password | If db_provider=postgresql |
+| `DB_PASSWORD` | PostgreSQL admin password | For Docker Compose |
+| `NEON_DATABASE_URL` | Neon connection string | If db_provider=neon |
+| `NEON_API_KEY` | Neon API key | If db_provider=neon |
+| `SUPABASE_DATABASE_URL` | Supabase connection string | If db_provider=supabase |
+| `SUPABASE_ACCESS_TOKEN` | Supabase access token | If db_provider=supabase |
+| `SUPABASE_PROJECT_REF` | Supabase project reference ID | If db_provider=supabase |
 
-Tüm değişkenler için [`.env.example`](.env.example) dosyasına bakın.
-
----
-
-## Katkıda Bulunma
-
-Katkılarınızı bekliyoruz! Detaylar için [CONTRIBUTING.md](CONTRIBUTING.md) dosyasına bakın.
+See [`.env.example`](.env.example) for all variables.
 
 ---
 
-## Lisans
+## Contributing
 
-Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
