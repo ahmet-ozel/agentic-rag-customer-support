@@ -97,8 +97,8 @@ User Request
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/ahmet-ozel/agentdesk.git
-cd agentdesk
+git clone https://github.com/ahmet-ozel/agentic-rag-customer-support.git
+cd agentic-rag-customer-support
 cp .env.example .env
 # Edit .env with your API keys and database passwords
 ```
@@ -473,8 +473,8 @@ agentdesk/
 
 ```bash
 # Clone the repo
-git clone https://github.com/ahmet-ozel/agentdesk.git
-cd agentdesk
+git clone https://github.com/ahmet-ozel/agentic-rag-customer-support.git
+cd agentic-rag-customer-support
 
 # Virtual environment
 python -m venv .venv
