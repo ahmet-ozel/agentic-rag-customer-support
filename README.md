@@ -97,7 +97,7 @@ Kullanıcı İsteği
 ### 1. Klonla ve yapılandır
 
 ```bash
-git clone https://github.com/your-username/agentdesk.git
+git clone https://github.com/ahmet-ozel/agentdesk.git
 cd agentdesk
 cp .env.example .env
 # .env dosyasını API anahtarlarınız ve veritabanı şifrelerinizle düzenleyin
@@ -473,7 +473,7 @@ agentdesk/
 
 ```bash
 # Repo'yu klonla
-git clone https://github.com/your-username/agentdesk.git
+git clone https://github.com/ahmet-ozel/agentdesk.git
 cd agentdesk
 
 # Sanal ortam
