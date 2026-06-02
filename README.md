@@ -1,4 +1,4 @@
-﻿# AgentDesk — Agentic RAG Platform
+﻿# AgentDesk: Agentic RAG Platform
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -64,7 +64,7 @@ User Request
 ### Key Design Decisions
 
 - **Unified LLM Interface:** All LLM providers (vLLM, OpenAI, Anthropic, Google, Ollama) are accessed through a single OpenAI-compatible client
-- **MCP Protocol:** All external I/O is managed through MCP servers — the agent loop stays pure
+- **MCP Protocol:** All external I/O is managed through MCP servers - the agent loop stays pure
 - **Reference Store:** Large tool results are kept in a TTL-based store to prevent token overflow
 - **Config-Driven:** All providers can be swapped via `config.yaml` with no code changes
 - **Tiered LLM:** A cheap model is used for routing and a strong model for response generation, optimizing cost
@@ -73,16 +73,16 @@ User Request
 
 ## Features
 
-- **Flexible LLM Backend** — vLLM (local), OpenAI, Anthropic, Google, Ollama; tiered routing for cost optimization
-- **Multiple Vector Stores** — Qdrant (default), extensible to Milvus, Chroma, pgvector
-- **MCP Server Management** — stdio and SSE transport, auto-restart, health monitoring
-- **Document Pipeline** — upload → parse → chunk → embed → store, with configurable chunking strategies
-- **Intent Routing** — TF-IDF semantic classification; chitchat bypasses the agent loop
-- **Session Management** — in-memory conversation history with TTL and message limits
-- **Reference Store** — large tool results stored under a `ref_xxx` key to prevent context overflow
-- **Gradio UI** — chat interface, document upload, MCP status and statistics panels
-- **Full Observability** — structured JSON logs for conversations, token usage and tool calls
-- **Multi-Database Support** — PostgreSQL (self-hosted), Neon (serverless), Supabase (BaaS)
+- **Flexible LLM Backend** - vLLM (local), OpenAI, Anthropic, Google, Ollama; tiered routing for cost optimization
+- **Multiple Vector Stores** - Qdrant (default), extensible to Milvus, Chroma, pgvector
+- **MCP Server Management** - stdio and SSE transport, auto-restart, health monitoring
+- **Document Pipeline** - upload → parse → chunk → embed → store, with configurable chunking strategies
+- **Intent Routing** - TF-IDF semantic classification; chitchat bypasses the agent loop
+- **Session Management** - in-memory conversation history with TTL and message limits
+- **Reference Store** - large tool results stored under a `ref_xxx` key to prevent context overflow
+- **Gradio UI** - chat interface, document upload, MCP status and statistics panels
+- **Full Observability** - structured JSON logs for conversations, token usage and tool calls
+- **Multi-Database Support** - PostgreSQL (self-hosted), Neon (serverless), Supabase (BaaS)
 
 ---
 
@@ -92,7 +92,7 @@ User Request
 
 - Python 3.11+
 - Docker & Docker Compose
-- (Optional) NVIDIA GPU — for local vLLM
+- (Optional) NVIDIA GPU - for local vLLM
 
 ### 1. Clone and configure
 
@@ -233,7 +233,7 @@ DB_PASSWORD=changeme
 docker compose up -d
 ```
 
-#### Option 2: Neon (Serverless — Free Plan Available)
+#### Option 2: Neon (Serverless, Free Plan)
 
 [Neon](https://neon.tech) is a serverless PostgreSQL service. Its free plan offers 0.5 GB storage and auto-scaling.
 
@@ -282,7 +282,7 @@ psql "${NEON_DATABASE_URL}" -f db/migrations/001_initial_schema.sql
 psql "${NEON_DATABASE_URL}" -f db/seed/seed_data.sql
 ```
 
-#### Option 3: Supabase (BaaS — Free Plan Available)
+#### Option 3: Supabase (BaaS, Free Plan)
 
 [Supabase](https://supabase.com) is an open-source Firebase alternative. Its free plan offers a 500 MB database, unlimited API requests and built-in auth.
 
@@ -519,19 +519,19 @@ make test-int
 ### Test Structure
 
 - **Unit Tests** (`tests/unit/`): Isolated tests for each component
-  - `test_database_config.py` — Database provider configuration (PostgreSQL, Neon, Supabase)
-  - `test_config.py` — Configuration loading and validation
-  - `test_llm_client.py` — LLM client functionality
-  - `test_mcp_manager.py` — MCP server management
-  - `test_intent_router.py` — Intent classification
-  - `test_agent_loop.py` — Agent loop workflow
-  - `test_reference_store.py` — Reference store operations
-  - `test_session_manager.py` — Session management
-  - `test_chunking.py` — Document chunking
-  - `test_vectorstore.py` — Vector store operations
-  - `test_api_endpoints.py` — REST API endpoints
-  - `test_schemas.py` — API schema validation
-  - `test_logging_config.py` — Logging setup
+  - `test_database_config.py` - Database provider configuration (PostgreSQL, Neon, Supabase)
+  - `test_config.py` - Configuration loading and validation
+  - `test_llm_client.py` - LLM client functionality
+  - `test_mcp_manager.py` - MCP server management
+  - `test_intent_router.py` - Intent classification
+  - `test_agent_loop.py` - Agent loop workflow
+  - `test_reference_store.py` - Reference store operations
+  - `test_session_manager.py` - Session management
+  - `test_chunking.py` - Document chunking
+  - `test_vectorstore.py` - Vector store operations
+  - `test_api_endpoints.py` - REST API endpoints
+  - `test_schemas.py` - API schema validation
+  - `test_logging_config.py` - Logging setup
 
 - **Integration Tests** (`tests/integration/`): End-to-end flow tests
   - Chat flow (Intent Router → Agent Loop → LLM → MCP → Response)
@@ -580,8 +580,8 @@ docker compose down
 ### Persistent Data
 
 Data is preserved via Docker volumes:
-- `postgres_data` — PostgreSQL database data
-- `qdrant_data` — Qdrant vector indexes
+- `postgres_data` - PostgreSQL database data
+- `qdrant_data` - Qdrant vector indexes
 
 ---
 
