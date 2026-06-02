@@ -1,4 +1,4 @@
-# AgentDesk — Agentic RAG Platform
+﻿# AgentDesk — Agentic RAG Platform
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -342,13 +342,13 @@ psql "${SUPABASE_DATABASE_URL}" -f db/seed/seed_data.sql
 | Feature | PostgreSQL | Neon | Supabase |
 |---------|-----------|------|----------|
 | Type | Self-hosted | Serverless | BaaS |
-| Free Plan | Via Docker | ✅ 0.5 GB | ✅ 500 MB |
-| Auto-scaling | ❌ | ✅ | ✅ |
-| Zero Cold Start | ✅ | ~0.5s | ✅ |
-| Built-in Auth | ❌ | ❌ | ✅ |
+| Free Plan | Via Docker | 0.5 GB | 500 MB |
+| Auto-scaling | No | Yes | Yes |
+| Zero Cold Start | Yes | ~0.5s | Yes |
+| Built-in Auth | No | No | Yes |
 | MCP Server | postgres_mcp | neon_mcp | supabase_mcp |
 | Setup Difficulty | Easy (Docker) | Easy | Easy |
-| Production Ready | ✅ | ✅ | ✅ |
+| Production Ready | Yes | Yes | Yes |
 
 ### Vector Store and Embedding
 
@@ -544,9 +544,9 @@ make test-int
 
 | Module | Test Count | Status |
 |-------|-------------|-------|
-| Unit Tests | 216 | ✅ Passing |
-| Integration Tests | 8 | ✅ Passing |
-| **Total** | **224** | **✅ All Passing** |
+| Unit Tests | 216 | Yes Passing |
+| Integration Tests | 8 | Yes Passing |
+| **Total** | **224** | **Yes All Passing** |
 
 ---
 
