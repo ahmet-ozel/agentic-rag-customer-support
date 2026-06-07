@@ -213,11 +213,11 @@ class TestYeniOzellik:
 
 ### PR Açmadan Önce
 
-1. ✅ Tüm testler geçiyor: `pytest tests/ -v`
-2. ✅ Lint hataları yok: `ruff check src/ tests/`
-3. ✅ Yeni özellik için testler yazıldı
-4. ✅ Docstring'ler eklendi
-5. ✅ `config.yaml` değişiklikleri varsa dokümante edildi
+1.  Tüm testler geçiyor: `pytest tests/ -v`
+2.  Lint hataları yok: `ruff check src/ tests/`
+3.  Yeni özellik için testler yazıldı
+4.  Docstring'ler eklendi
+5.  `config.yaml` değişiklikleri varsa dokümante edildi
 
 ### PR Şablonu
 
@@ -332,4 +332,4 @@ Sorularınız için:
 - [GitHub Issues](../../issues) üzerinden soru sorabilirsiniz
 - Mevcut [tartışmaları](../../discussions) inceleyebilirsiniz
 
-Katkılarınız için teşekkürler! 🎉
+Katkılarınız için teşekkürler!

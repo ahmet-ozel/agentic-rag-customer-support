@@ -61,7 +61,7 @@ class MCPManager:
     Parameters
     ----------
     servers:
-        Mapping of server name → ``MCPServerConfig`` (from config.yaml).
+        Mapping of server name  ``MCPServerConfig`` (from config.yaml).
     """
 
     def __init__(self, servers: dict[str, MCPServerConfig]) -> None:

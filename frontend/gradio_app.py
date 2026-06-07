@@ -64,11 +64,11 @@ def chat_send(
             resp.raise_for_status()
             data = resp.json()
     except httpx.HTTPStatusError as exc:
-        err_msg = f"⚠️ Backend error: {exc.response.status_code}"
+        err_msg = f" Backend error: {exc.response.status_code}"
         chat_history = chat_history + [{"role": "assistant", "content": err_msg}]
         return chat_history, session_id or "", "", ""
     except Exception as exc:
-        err_msg = f"⚠️ Connection error: {exc}"
+        err_msg = f" Connection error: {exc}"
         chat_history = chat_history + [{"role": "assistant", "content": err_msg}]
         return chat_history, session_id or "", "", ""
 
@@ -113,7 +113,7 @@ def _format_traces(traces: list[dict]) -> str:
         server = t.get("server_name", "?")
         duration = t.get("duration_ms", 0.0)
         summary = t.get("result_summary", "")
-        lines.append(f"🔧 **{name}** ({server}) - {duration:.0f} ms")
+        lines.append(f" **{name}** ({server}) - {duration:.0f} ms")
         if summary:
             lines.append(f"> {summary}")
         lines.append("")
@@ -141,16 +141,16 @@ def upload_document(file) -> str:
                 resp.raise_for_status()
                 data = resp.json()
     except httpx.HTTPStatusError as exc:
-        return f"⚠️ Upload failed: {exc.response.status_code} - {exc.response.text}"
+        return f" Upload failed: {exc.response.status_code} - {exc.response.text}"
     except Exception as exc:
-        return f"⚠️ Connection error: {exc}"
+        return f" Connection error: {exc}"
 
     doc_id = data.get("document_id", "?")
     status = data.get("status", "?")
     message = data.get("message", "")
     filename = data.get("filename", "?")
     return (
-        f"✅ **{filename}** uploaded successfully\n\n"
+        f" **{filename}** uploaded successfully\n\n"
         f"- Document ID: `{doc_id}`\n"
         f"- Status: {status}\n"
         f"- {message}"
@@ -165,7 +165,7 @@ def list_documents() -> str:
             resp.raise_for_status()
             docs = resp.json()
     except Exception as exc:
-        return f"⚠️ Error: {exc}"
+        return f" Error: {exc}"
 
     if not docs:
         return "_No documents uploaded yet._"
@@ -192,7 +192,7 @@ def fetch_system_info() -> str:
             resp.raise_for_status()
             data = resp.json()
     except Exception as exc:
-        return f"⚠️ Error: {exc}"
+        return f" Error: {exc}"
 
     version = data.get("version", "?")
     llm_provider = data.get("active_llm_provider", "?")
@@ -217,7 +217,7 @@ def fetch_mcp_status() -> str:
             resp.raise_for_status()
             data = resp.json()
     except Exception as exc:
-        return f"⚠️ Error: {exc}"
+        return f" Error: {exc}"
 
     servers = data.get("servers", {})
     if not servers:
@@ -230,12 +230,12 @@ def fetch_mcp_status() -> str:
         uptime = info.get("uptime_seconds")
         error = info.get("error_message")
 
-        icon = {"running": "🟢", "stopped": "🔴", "error": "🟡"}.get(status, "⚪")
+        icon = {"running": "", "stopped": "", "error": ""}.get(status, "")
         line = f"{icon} **{name}** - {status} ({transport})"
         if uptime is not None:
             line += f" - uptime {uptime:.0f}s"
         if error:
-            line += f"\n  > ⚠️ {error}"
+            line += f"\n  >  {error}"
         lines.append(line)
     return "\n".join(lines)
 
@@ -248,7 +248,7 @@ def fetch_stats() -> str:
             resp.raise_for_status()
             data = resp.json()
     except Exception as exc:
-        return f"⚠️ Error: {exc}"
+        return f" Error: {exc}"
 
     convos = data.get("total_conversations", 0)
     tokens = data.get("total_tokens", {})
@@ -280,14 +280,14 @@ def build_ui() -> gr.Blocks:
         title="AgentDesk - RAG Assistant",
         theme=gr.themes.Soft(),
     ) as demo:
-        gr.Markdown("# 🤖 AgentDesk - RAG Customer Support Assistant")
+        gr.Markdown("#  AgentDesk - RAG Customer Support Assistant")
 
         # Hidden state for session_id
         session_state = gr.State(value="")
 
         with gr.Tabs():
             # ---- Chat Tab ----
-            with gr.Tab("💬 Chat"):
+            with gr.Tab(" Chat"):
                 chatbot = gr.Chatbot(
                     label="Conversation",
                     type="messages",
@@ -301,10 +301,10 @@ def build_ui() -> gr.Blocks:
                     )
                     send_btn = gr.Button("Send", variant="primary", scale=1)
 
-                with gr.Accordion("📚 Source Citations", open=False):
+                with gr.Accordion(" Source Citations", open=False):
                     citations_display = gr.Markdown("_No citations yet._")
 
-                with gr.Accordion("🔧 Tool Traces", open=False):
+                with gr.Accordion(" Tool Traces", open=False):
                     traces_display = gr.Markdown("_No tool traces yet._")
 
                 # Wire up chat events
@@ -324,7 +324,7 @@ def build_ui() -> gr.Blocks:
                 ).then(fn=lambda: "", outputs=msg_input)
 
             # ---- Documents Tab ----
-            with gr.Tab("📄 Documents"):
+            with gr.Tab(" Documents"):
                 gr.Markdown("### Upload Documents")
                 with gr.Row():
                     file_input = gr.File(label="Select file to upload")
@@ -339,17 +339,17 @@ def build_ui() -> gr.Blocks:
 
                 gr.Markdown("### Uploaded Documents")
                 doc_list_display = gr.Markdown("_Click refresh to load._")
-                refresh_docs_btn = gr.Button("🔄 Refresh List")
+                refresh_docs_btn = gr.Button(" Refresh List")
                 refresh_docs_btn.click(
                     fn=list_documents,
                     outputs=doc_list_display,
                 )
 
             # ---- Settings Tab ----
-            with gr.Tab("⚙️ Settings & Info"):
+            with gr.Tab(" Settings & Info"):
                 gr.Markdown("### System Information")
                 sys_info_display = gr.Markdown("_Click refresh to load._")
-                refresh_info_btn = gr.Button("🔄 Refresh System Info")
+                refresh_info_btn = gr.Button(" Refresh System Info")
                 refresh_info_btn.click(
                     fn=fetch_system_info,
                     outputs=sys_info_display,
@@ -357,7 +357,7 @@ def build_ui() -> gr.Blocks:
 
                 gr.Markdown("### MCP Server Status")
                 mcp_status_display = gr.Markdown("_Click refresh to load._")
-                refresh_mcp_btn = gr.Button("🔄 Refresh MCP Status")
+                refresh_mcp_btn = gr.Button(" Refresh MCP Status")
                 refresh_mcp_btn.click(
                     fn=fetch_mcp_status,
                     outputs=mcp_status_display,
@@ -365,7 +365,7 @@ def build_ui() -> gr.Blocks:
 
                 gr.Markdown("### Statistics")
                 stats_display = gr.Markdown("_Click refresh to load._")
-                refresh_stats_btn = gr.Button("🔄 Refresh Stats")
+                refresh_stats_btn = gr.Button(" Refresh Stats")
                 refresh_stats_btn.click(
                     fn=fetch_stats,
                     outputs=stats_display,

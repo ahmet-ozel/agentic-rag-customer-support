@@ -61,7 +61,7 @@ class AgentLoop:
     reference_store:
         In-memory store for large tool results.
     max_iterations:
-        Maximum number of LLM ↔ tool round-trips before forced stop.
+        Maximum number of LLM  tool round-trips before forced stop.
     reference_threshold:
         Character count above which tool results are stored in the
         reference store and replaced with a ``ref_xxx`` code.

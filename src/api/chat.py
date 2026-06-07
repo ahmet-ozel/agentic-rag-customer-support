@@ -1,6 +1,6 @@
 ﻿"""Chat endpoints.
 
-POST      /api/v1/chat        - Synchronous chat (Intent Router → Agent Loop → response)
+POST      /api/v1/chat        - Synchronous chat (Intent Router  Agent Loop  response)
 WebSocket /api/v1/chat/stream  - Streaming chat (placeholder)
 """
 

@@ -1,6 +1,6 @@
 ﻿"""Document endpoints.
 
-POST   /api/v1/documents      - Upload a document (parser → Reference Store → chunking → embedding → Vector Store)
+POST   /api/v1/documents      - Upload a document (parser  Reference Store  chunking  embedding  Vector Store)
 GET    /api/v1/documents      - List all documents
 DELETE /api/v1/documents/{id}  - Delete a document
 """
@@ -92,7 +92,7 @@ async def upload_document(
 ) -> DocumentUploadResponse:
     """Upload a document and run the processing pipeline.
 
-    Status transitions: uploading → parsing → chunking → embedding → completed (or → error)
+    Status transitions: uploading  parsing  chunking  embedding  completed (or  error)
     """
     doc_id = str(uuid.uuid4())
     filename = file.filename or "unknown"

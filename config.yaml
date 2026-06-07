@@ -60,9 +60,9 @@ llm:
 
 # Customer database configuration
 # db_provider selects the active backend: postgresql | neon | supabase
-#   postgresql : self-hosted or Docker Postgres
-#   neon       : serverless cloud Postgres (neon.tech) - free tier available
-#   supabase   : cloud Postgres + BaaS (supabase.com) - free tier available
+# postgresql : self-hosted or Docker Postgres
+# neon       : serverless cloud Postgres (neon.tech) - free tier available
+# supabase   : cloud Postgres + BaaS (supabase.com) - free tier available
 database:
   db_provider: "postgresql"
 

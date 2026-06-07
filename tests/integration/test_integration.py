@@ -163,7 +163,7 @@ def _reset_state():
 
 
 class TestChatFlowIntegration:
-    """User message → Intent Router → Agent Loop → LLM → MCP → Response.
+    """User message  Intent Router  Agent Loop  LLM  MCP  Response.
 
     Validates: Requirements 10.1, 10.4, 10.5
     """
@@ -350,7 +350,7 @@ class TestChatFlowIntegration:
 
 
 class TestDocumentFlowIntegration:
-    """Upload → Parser → Reference Store → Chunking → Embedding → Vector Store.
+    """Upload  Parser  Reference Store  Chunking  Embedding  Vector Store.
 
     Validates: Requirements 10.2, 10.3
     """
@@ -485,7 +485,7 @@ class TestDocumentFlowIntegration:
 
 
 class TestCustomerQueryFlowIntegration:
-    """Intent → postgres-mcp → LLM → Response with tool traces.
+    """Intent  postgres-mcp  LLM  Response with tool traces.
 
     Validates: Requirements 10.1, 10.4
     """

@@ -1,7 +1,7 @@
 ﻿"""ChunkingEngine - splits documents into chunks using configurable strategies.
 
 Strategies:
-- recursive: paragraph → sentence → character splitting with overlap
+- recursive: paragraph  sentence  character splitting with overlap
 - semantic: paragraph-based splitting (simple grouping by double newlines)
 - document_aware: splits on markdown headings, preserving heading hierarchy in metadata
 """
