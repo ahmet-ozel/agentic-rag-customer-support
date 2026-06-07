@@ -1,4 +1,4 @@
-# Katkıda Bulunma Rehberi
+﻿# Katkıda Bulunma Rehberi
 
 AgentDesk projesine katkıda bulunmak istediğiniz için teşekkürler! Bu rehber, katkı sürecini kolaylaştırmak için hazırlanmıştır.
 
@@ -32,7 +32,7 @@ beklenir.
 
 ### Hata Bildirimi
 
-1. Önce [mevcut issue'ları](../../issues) kontrol edin — aynı hata zaten bildirilmiş olabilir
+1. Önce [mevcut issue'ları](../../issues) kontrol edin  -  aynı hata zaten bildirilmiş olabilir
 2. Yeni bir issue açın ve şunları ekleyin:
    - Hatanın net açıklaması
    - Hatayı yeniden üretme adımları
@@ -168,9 +168,9 @@ pytest tests/unit/test_config.py::TestConfigManagerLoad -v
 
 ### Test Yazma Kuralları
 
-1. **Her yeni özellik için test yazın** — PR'lar test olmadan kabul edilmez
+1. **Her yeni özellik için test yazın**  -  PR'lar test olmadan kabul edilmez
 2. **Birim testleri** `tests/unit/` altına, **entegrasyon testleri** `tests/integration/` altına yazın
-3. **Mock kullanın** — harici servislere (LLM, veritabanı) bağımlılık oluşturmayın
+3. **Mock kullanın**  -  harici servislere (LLM, veritabanı) bağımlılık oluşturmayın
 4. **Açıklayıcı test isimleri** kullanın: `test_upload_document_returns_completed_status`
 5. **Edge case'leri** test edin: boş girdi, geçersiz parametre, zaman aşımı
 

@@ -261,7 +261,7 @@ database:
       connection_string: ${NEON_DATABASE_URL}
       ssl_mode: require
 
-# Update MCP servers — enable neon_mcp, disable postgres_mcp
+# Update MCP servers  -  enable neon_mcp, disable postgres_mcp
 mcp_servers:
   postgres_mcp:
     enabled: false
@@ -316,7 +316,7 @@ database:
       project_ref: ${SUPABASE_PROJECT_REF}
       ssl_mode: require
 
-# Update MCP servers — enable supabase_mcp, disable postgres_mcp
+# Update MCP servers  -  enable supabase_mcp, disable postgres_mcp
 mcp_servers:
   postgres_mcp:
     enabled: false
@@ -427,16 +427,16 @@ curl http://localhost:8000/api/v1/stats
 ```
 agentdesk/
 ├── src/
-│   ├── agent/          # AgentLoop — iterative LLM ↔ MCP tool-call loop
+│   ├── agent/          # AgentLoop  -  iterative LLM ↔ MCP tool-call loop
 │   ├── api/            # FastAPI routers (chat, documents, customers, config, stats)
 │   ├── chunking/       # ChunkingEngine (recursive, semantic, document_aware)
 │   ├── config/         # ConfigManager + Pydantic models
-│   ├── llm/            # LLMClient — unified OpenAI-compatible interface
-│   ├── mcp/            # MCPManager — stdio/SSE lifecycle management
+│   ├── llm/            # LLMClient  -  unified OpenAI-compatible interface
+│   ├── mcp/            # MCPManager  -  stdio/SSE lifecycle management
 │   ├── models/         # API request/response schemas
-│   ├── router/         # IntentRouter — TF-IDF semantic classification
-│   ├── session/        # SessionManager — conversation history
-│   ├── store/          # ReferenceStore — TTL-based memory store
+│   ├── router/         # IntentRouter  -  TF-IDF semantic classification
+│   ├── session/        # SessionManager  -  conversation history
+│   ├── store/          # ReferenceStore  -  TTL-based memory store
 │   ├── vectorstore/    # VectorStoreAdapter + QdrantVectorStore
 │   ├── logging_config.py  # Structured logging
 │   └── main.py         # FastAPI application entry point

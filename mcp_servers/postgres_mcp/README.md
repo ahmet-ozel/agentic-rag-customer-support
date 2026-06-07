@@ -1,11 +1,11 @@
-# postgres-mcp — PostgreSQL MCP Sunucusu
+﻿# postgres-mcp  -  PostgreSQL MCP Sunucusu
 
 PostgreSQL müşteri veritabanına **salt okunur** erişim sağlayan MCP (Model Context Protocol) sunucusu.
 
 ## Güvenlik
 
 - **Salt okunur erişim:** Yalnızca `SELECT` sorguları kabul edilir. `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, `CREATE`, `TRUNCATE` ve diğer yazma işlemleri reddedilir.
-- **Parametreli sorgular:** Tüm kullanıcı girdileri parametreli sorgular ile işlenir — SQL injection koruması sağlar.
+- **Parametreli sorgular:** Tüm kullanıcı girdileri parametreli sorgular ile işlenir  -  SQL injection koruması sağlar.
 - **Sorgu zaman aşımı:** Uzun süren sorgular 30 saniye sonra sonlandırılır.
 - **Tablo kısıtlaması:** Yalnızca `allowed_tables` listesindeki tablolara erişim izni verilir.
 
