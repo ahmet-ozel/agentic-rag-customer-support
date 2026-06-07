@@ -1,4 +1,4 @@
-"""Integration tests — end-to-end flows with mocked external dependencies.
+﻿"""Integration tests - end-to-end flows with mocked external dependencies.
 
 Verifies the full pipeline through real components (ConfigManager, IntentRouter,
 SessionManager, ReferenceStore, ChunkingEngine, AgentLoop) while mocking only
@@ -322,7 +322,7 @@ class TestChatFlowIntegration:
         app = _build_app()
         client = TestClient(app)
 
-        # First message — creates a session
+        # First message - creates a session
         resp1 = client.post(
             "/api/v1/chat",
             json={"message": "müşteri sorgula id=5"},
@@ -330,7 +330,7 @@ class TestChatFlowIntegration:
         assert resp1.status_code == 200
         session_id = resp1.json()["session_id"]
 
-        # Second message — reuses the session
+        # Second message - reuses the session
         resp2 = client.post(
             "/api/v1/chat",
             json={"message": "müşteri detayları göster", "session_id": session_id},

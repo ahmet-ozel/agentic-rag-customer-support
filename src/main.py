@@ -1,4 +1,4 @@
-"""AgentDesk RAG Platform — FastAPI application entry point.
+﻿"""AgentDesk RAG Platform - FastAPI application entry point.
 
 Run with:
     python -m src.main

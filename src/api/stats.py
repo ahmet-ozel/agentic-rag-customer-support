@@ -1,6 +1,6 @@
-"""Statistics endpoints.
+﻿"""Statistics endpoints.
 
-GET /api/v1/stats — Token usage, conversation count, tool call distribution, avg response time
+GET /api/v1/stats - Token usage, conversation count, tool call distribution, avg response time
 """
 
 from __future__ import annotations

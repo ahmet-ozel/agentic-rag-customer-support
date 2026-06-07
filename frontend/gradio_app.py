@@ -1,4 +1,4 @@
-"""AgentDesk Gradio Frontend — Chat, document upload, and system info UI.
+﻿"""AgentDesk Gradio Frontend - Chat, document upload, and system info UI.
 
 Run standalone:
     python frontend/gradio_app.py
@@ -113,7 +113,7 @@ def _format_traces(traces: list[dict]) -> str:
         server = t.get("server_name", "?")
         duration = t.get("duration_ms", 0.0)
         summary = t.get("result_summary", "")
-        lines.append(f"🔧 **{name}** ({server}) — {duration:.0f} ms")
+        lines.append(f"🔧 **{name}** ({server}) - {duration:.0f} ms")
         if summary:
             lines.append(f"> {summary}")
         lines.append("")
@@ -141,7 +141,7 @@ def upload_document(file) -> str:
                 resp.raise_for_status()
                 data = resp.json()
     except httpx.HTTPStatusError as exc:
-        return f"⚠️ Upload failed: {exc.response.status_code} — {exc.response.text}"
+        return f"⚠️ Upload failed: {exc.response.status_code} - {exc.response.text}"
     except Exception as exc:
         return f"⚠️ Connection error: {exc}"
 
@@ -175,7 +175,7 @@ def list_documents() -> str:
         name = d.get("filename", "?")
         status = d.get("status", "?")
         doc_id = d.get("document_id", "?")
-        lines.append(f"- **{name}** — {status} (`{doc_id}`)")
+        lines.append(f"- **{name}** - {status} (`{doc_id}`)")
     return "\n".join(lines)
 
 
@@ -231,9 +231,9 @@ def fetch_mcp_status() -> str:
         error = info.get("error_message")
 
         icon = {"running": "🟢", "stopped": "🔴", "error": "🟡"}.get(status, "⚪")
-        line = f"{icon} **{name}** — {status} ({transport})"
+        line = f"{icon} **{name}** - {status} ({transport})"
         if uptime is not None:
-            line += f" — uptime {uptime:.0f}s"
+            line += f" - uptime {uptime:.0f}s"
         if error:
             line += f"\n  > ⚠️ {error}"
         lines.append(line)
@@ -277,10 +277,10 @@ def fetch_stats() -> str:
 def build_ui() -> gr.Blocks:
     """Construct the Gradio Blocks interface."""
     with gr.Blocks(
-        title="AgentDesk — RAG Assistant",
+        title="AgentDesk - RAG Assistant",
         theme=gr.themes.Soft(),
     ) as demo:
-        gr.Markdown("# 🤖 AgentDesk — RAG Customer Support Assistant")
+        gr.Markdown("# 🤖 AgentDesk - RAG Customer Support Assistant")
 
         # Hidden state for session_id
         session_state = gr.State(value="")

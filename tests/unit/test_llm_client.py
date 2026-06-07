@@ -1,4 +1,4 @@
-"""Unit tests for LLMClient."""
+﻿"""Unit tests for LLMClient."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from src.models.schemas import TokenUsage
 
 
 # ---------------------------------------------------------------------------
-# Helpers — build fake OpenAI SDK response objects
+# Helpers - build fake OpenAI SDK response objects
 # ---------------------------------------------------------------------------
 
 
@@ -233,7 +233,7 @@ class TestToolCallParsing:
 
 
 # ---------------------------------------------------------------------------
-# chat_completion — mocked end-to-end
+# chat_completion - mocked end-to-end
 # ---------------------------------------------------------------------------
 
 

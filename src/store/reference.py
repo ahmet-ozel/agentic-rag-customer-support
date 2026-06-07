@@ -1,4 +1,4 @@
-"""Reference Store — temporary in-memory storage for large data with TTL."""
+﻿"""Reference Store - temporary in-memory storage for large data with TTL."""
 
 from __future__ import annotations
 

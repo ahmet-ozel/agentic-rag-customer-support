@@ -1,4 +1,4 @@
-"""Shared dependency factories for API endpoints.
+﻿"""Shared dependency factories for API endpoints.
 
 These module-level singletons are set during application startup (in main.py).
 Endpoint functions use ``Depends(get_xxx)`` to receive them.
@@ -15,7 +15,7 @@ from src.session.manager import SessionManager
 from src.store.reference import ReferenceStore
 from src.vectorstore.adapter import VectorStoreAdapter
 
-# Module-level singletons — set during app startup
+# Module-level singletons - set during app startup
 _config_manager: ConfigManager | None = None
 _intent_router: IntentRouter | None = None
 _agent_loop: AgentLoop | None = None

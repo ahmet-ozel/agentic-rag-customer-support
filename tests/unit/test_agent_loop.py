@@ -1,4 +1,4 @@
-"""Unit tests for AgentLoop."""
+﻿"""Unit tests for AgentLoop."""
 
 from __future__ import annotations
 
@@ -100,7 +100,7 @@ def agent_loop(
 
 
 # ---------------------------------------------------------------------------
-# Test: Normal flow — LLM returns content immediately
+# Test: Normal flow - LLM returns content immediately
 # ---------------------------------------------------------------------------
 
 
@@ -144,7 +144,7 @@ class TestNormalFlow:
 
 
 # ---------------------------------------------------------------------------
-# Test: Tool call flow — LLM calls tool, then returns content
+# Test: Tool call flow - LLM calls tool, then returns content
 # ---------------------------------------------------------------------------
 
 

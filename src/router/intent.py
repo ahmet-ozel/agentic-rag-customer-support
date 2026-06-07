@@ -1,4 +1,4 @@
-"""Intent Router — classifies user messages using TF-IDF cosine similarity.
+﻿"""Intent Router - classifies user messages using TF-IDF cosine similarity.
 
 Falls back to DEFAULT_INTENT when no category matches or config is empty.
 """

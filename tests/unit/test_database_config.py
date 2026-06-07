@@ -1,4 +1,4 @@
-"""Unit tests for database configuration models.
+﻿"""Unit tests for database configuration models.
 
 Covers PostgreSQL, Neon, and Supabase provider configs,
 DatabaseConfig provider selection, connection strings,
@@ -135,7 +135,7 @@ class TestSupabaseConfig:
 
 
 # ---------------------------------------------------------------------------
-# DatabaseConfig — provider selection
+# DatabaseConfig - provider selection
 # ---------------------------------------------------------------------------
 
 

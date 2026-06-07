@@ -1,6 +1,6 @@
-"""MCP status endpoints.
+﻿"""MCP status endpoints.
 
-GET /api/v1/mcp/status — Report status of all MCP servers
+GET /api/v1/mcp/status - Report status of all MCP servers
 """
 
 from __future__ import annotations

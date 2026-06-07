@@ -1,5 +1,5 @@
-# =============================================================================
-# AgentDesk RAG Platform — Docker Compose
+﻿# =============================================================================
+# AgentDesk RAG Platform - Docker Compose
 # =============================================================================
 # Tüm servisleri başlatmak için: docker compose up -d
 # GPU profili ile vLLM dahil: docker compose --profile gpu up -d
@@ -7,7 +7,7 @@
 
 services:
   # ---------------------------------------------------------------------------
-  # AgentDesk — Ana FastAPI sunucusu
+  # AgentDesk - Ana FastAPI sunucusu
   # ---------------------------------------------------------------------------
   agentdesk:
     build:
@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 
   # ---------------------------------------------------------------------------
-  # PostgreSQL — Müşteri veritabanı
+  # PostgreSQL - Müşteri veritabanı
   # ---------------------------------------------------------------------------
   postgres:
     image: postgres:16-alpine
@@ -63,7 +63,7 @@ services:
     restart: unless-stopped
 
   # ---------------------------------------------------------------------------
-  # Qdrant — Vektör veritabanı
+  # Qdrant - Vektör veritabanı
   # ---------------------------------------------------------------------------
   qdrant:
     image: qdrant/qdrant:latest
@@ -84,7 +84,7 @@ services:
     restart: unless-stopped
 
   # ---------------------------------------------------------------------------
-  # vLLM — Yerel LLM çıkarım sunucusu (GPU profili ile opsiyonel)
+  # vLLM - Yerel LLM çıkarım sunucusu (GPU profili ile opsiyonel)
   # Kullanım: docker compose --profile gpu up -d
   # ---------------------------------------------------------------------------
   vllm:
@@ -119,7 +119,7 @@ services:
     restart: unless-stopped
 
 # =============================================================================
-# Volumes — Kalıcı veri depolama
+# Volumes - Kalıcı veri depolama
 # =============================================================================
 volumes:
   postgres_data:

@@ -1,4 +1,4 @@
-"""Structured logging and monitoring for AgentDesk RAG Platform.
+﻿"""Structured logging and monitoring for AgentDesk RAG Platform.
 
 Provides:
 - Configurable log level and file-based logging
@@ -29,7 +29,7 @@ TOOL_CALL_LOGGER = "agentdesk.tool_call"
 TOKEN_USAGE_LOGGER = "agentdesk.token_usage"
 
 # ---------------------------------------------------------------------------
-# Default cost rates (USD per 1K tokens) — rough estimates
+# Default cost rates (USD per 1K tokens) - rough estimates
 # ---------------------------------------------------------------------------
 
 _DEFAULT_COST_PER_1K_PROMPT = 0.0015

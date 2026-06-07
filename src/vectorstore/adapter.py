@@ -1,4 +1,4 @@
-"""VectorStoreAdapter — abstract base class for vector store backends.
+﻿"""VectorStoreAdapter - abstract base class for vector store backends.
 
 Provides a unified interface for storing document chunks, performing
 similarity search, and deleting documents.  Concrete implementations

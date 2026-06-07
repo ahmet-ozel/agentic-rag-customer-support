@@ -1,4 +1,4 @@
-"""MCP Manager — lifecycle management for MCP server subprocesses.
+﻿"""MCP Manager - lifecycle management for MCP server subprocesses.
 
 Handles starting, stopping, restarting, and communicating with MCP servers
 configured in ``config.yaml``.  Supports **stdio** (subprocess with
@@ -137,7 +137,7 @@ class MCPManager:
         try:
             if cfg.transport == "stdio" and state.process is not None:
                 await self._stop_stdio(name, state)
-            # SSE servers are stateless HTTP — nothing to terminate
+            # SSE servers are stateless HTTP - nothing to terminate
             state.status = "stopped"
             state.start_time = None
             state.error_message = None
@@ -186,7 +186,7 @@ class MCPManager:
 
         if state.status != "running":
             raise MCPManagerError(
-                f"Cannot call tool '{tool_name}' — server '{server_name}' "
+                f"Cannot call tool '{tool_name}' - server '{server_name}' "
                 f"is not running (status={state.status})"
             )
 
@@ -299,7 +299,7 @@ class MCPManager:
     # ------------------------------------------------------------------
 
     def _start_sse(self, name: str, state: _ServerState) -> None:
-        """SSE servers are remote HTTP endpoints — just validate the config."""
+        """SSE servers are remote HTTP endpoints - just validate the config."""
         cfg = state.config
         if not cfg.command:
             raise MCPManagerError(

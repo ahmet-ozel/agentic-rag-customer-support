@@ -1,4 +1,4 @@
-"""Agent module — core iterative tool-calling loop."""
+﻿"""Agent module - core iterative tool-calling loop."""
 
 from src.agent.loop import AgentLoop, AgentResponse
 

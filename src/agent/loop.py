@@ -1,4 +1,4 @@
-"""Agent Loop — iterative tool-calling loop between LLM and MCP servers.
+﻿"""Agent Loop - iterative tool-calling loop between LLM and MCP servers.
 
 The ``AgentLoop`` sends messages + available tools to the LLM, executes any
 tool calls via ``MCPManager``, appends results, and loops until the LLM

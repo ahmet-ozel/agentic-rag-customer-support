@@ -1,7 +1,7 @@
-"""Chat endpoints.
+﻿"""Chat endpoints.
 
-POST      /api/v1/chat        — Synchronous chat (Intent Router → Agent Loop → response)
-WebSocket /api/v1/chat/stream  — Streaming chat (placeholder)
+POST      /api/v1/chat        - Synchronous chat (Intent Router → Agent Loop → response)
+WebSocket /api/v1/chat/stream  - Streaming chat (placeholder)
 """
 
 from __future__ import annotations

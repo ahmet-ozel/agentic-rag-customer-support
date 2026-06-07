@@ -1,7 +1,7 @@
-"""Unit tests for MCPManager.
+﻿"""Unit tests for MCPManager.
 
 Tests cover server lifecycle (start/stop), status reporting,
-tool call routing, and restart logic — all with mocked subprocesses.
+tool call routing, and restart logic - all with mocked subprocesses.
 """
 
 from __future__ import annotations
@@ -125,7 +125,7 @@ class TestStartStop:
     @pytest.mark.asyncio
     async def test_stop_already_stopped_is_noop(self) -> None:
         _, mgr = _make_manager()
-        # Server never started — stop should not raise
+        # Server never started - stop should not raise
         await mgr.stop_server("db")
         assert mgr.get_status()["db"].status == "stopped"
 

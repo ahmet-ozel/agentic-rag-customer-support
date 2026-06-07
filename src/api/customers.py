@@ -1,6 +1,6 @@
-"""Customer endpoints.
+﻿"""Customer endpoints.
 
-GET /api/v1/customers — Customer info query (placeholder for MVP)
+GET /api/v1/customers - Customer info query (placeholder for MVP)
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ async def list_customers(
     For MVP, returns a placeholder response.
     """
     return {
-        "message": "Customer query endpoint (placeholder — requires postgres-mcp)",
+        "message": "Customer query endpoint (placeholder - requires postgres-mcp)",
         "query": q,
         "customers": [],
     }

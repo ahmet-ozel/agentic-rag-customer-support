@@ -1,4 +1,4 @@
-"""LLM Client — unified interface for all providers via OpenAI SDK.
+﻿"""LLM Client - unified interface for all providers via OpenAI SDK.
 
 All providers (vLLM, Ollama, OpenAI, Anthropic, Google) expose
 OpenAI-compatible endpoints, so we use a single ``openai.AsyncOpenAI``

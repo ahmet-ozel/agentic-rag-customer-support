@@ -1,8 +1,8 @@
-"""Document endpoints.
+﻿"""Document endpoints.
 
-POST   /api/v1/documents      — Upload a document (parser → Reference Store → chunking → embedding → Vector Store)
-GET    /api/v1/documents      — List all documents
-DELETE /api/v1/documents/{id}  — Delete a document
+POST   /api/v1/documents      - Upload a document (parser → Reference Store → chunking → embedding → Vector Store)
+GET    /api/v1/documents      - List all documents
+DELETE /api/v1/documents/{id}  - Delete a document
 """
 
 from __future__ import annotations

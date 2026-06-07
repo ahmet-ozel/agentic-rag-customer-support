@@ -1,4 +1,4 @@
-app:
+﻿app:
   name: "AgentDesk"
   version: "1.0.0"
   host: "0.0.0.0"
@@ -61,8 +61,8 @@ llm:
 # Customer database configuration
 # db_provider selects the active backend: postgresql | neon | supabase
 #   postgresql : self-hosted or Docker Postgres
-#   neon       : serverless cloud Postgres (neon.tech) — free tier available
-#   supabase   : cloud Postgres + BaaS (supabase.com) — free tier available
+#   neon       : serverless cloud Postgres (neon.tech) - free tier available
+#   supabase   : cloud Postgres + BaaS (supabase.com) - free tier available
 database:
   db_provider: "postgresql"
 
@@ -110,7 +110,7 @@ chunking:
   chunk_size: 512
   chunk_overlap: 50
 
-# MCP servers — enable the one matching your db_provider
+# MCP servers - enable the one matching your db_provider
 mcp_servers:
   postgres_mcp:
     enabled: true

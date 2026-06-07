@@ -1,4 +1,4 @@
-"""Unit tests for VectorStoreAdapter, QdrantVectorStore, and factory."""
+﻿"""Unit tests for VectorStoreAdapter, QdrantVectorStore, and factory."""
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def _mock_qdrant_client(collection_exists: bool = False) -> MagicMock:
     collections_resp.collections = [col]
     client.get_collections.return_value = collections_resp
 
-    # query_points — return empty by default
+    # query_points - return empty by default
     query_resp = MagicMock()
     query_resp.points = []
     client.query_points.return_value = query_resp
@@ -119,7 +119,7 @@ class TestCreateVectorStore:
 
 
 # ------------------------------------------------------------------
-# QdrantVectorStore — collection management
+# QdrantVectorStore - collection management
 # ------------------------------------------------------------------
 
 

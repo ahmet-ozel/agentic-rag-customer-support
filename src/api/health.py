@@ -1,7 +1,7 @@
-"""Health and system info endpoints.
+﻿"""Health and system info endpoints.
 
-GET /health — System health status
-GET /info   — Version, active LLM provider, active model, vector store, enabled MCP servers
+GET /health - System health status
+GET /info   - Version, active LLM provider, active model, vector store, enabled MCP servers
 """
 
 from __future__ import annotations

@@ -1,7 +1,7 @@
-"""Configuration endpoints.
+﻿"""Configuration endpoints.
 
-GET /api/v1/config — View current configuration
-PUT /api/v1/config — Update configuration at runtime
+GET /api/v1/config - View current configuration
+PUT /api/v1/config - Update configuration at runtime
 """
 
 from __future__ import annotations

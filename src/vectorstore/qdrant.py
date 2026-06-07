@@ -1,4 +1,4 @@
-"""QdrantVectorStore — Qdrant implementation of VectorStoreAdapter.
+﻿"""QdrantVectorStore - Qdrant implementation of VectorStoreAdapter.
 
 Uses the ``qdrant-client`` library to store document chunks, perform
 cosine similarity search, and delete documents by ID filter.
@@ -71,7 +71,7 @@ class QdrantVectorStore(VectorStoreAdapter):
         )
 
     # ------------------------------------------------------------------
-    # Embedding helper (placeholder — delegates to real model later)
+    # Embedding helper (placeholder - delegates to real model later)
     # ------------------------------------------------------------------
 
     def _embed(self, text: str) -> list[float]:
@@ -187,7 +187,7 @@ class QdrantVectorStore(VectorStoreAdapter):
     def _rerank(
         self, query: str, results: list[SearchResult], top_k: int
     ) -> list[SearchResult]:
-        """Placeholder reranker — simply returns the first *top_k* results.
+        """Placeholder reranker - simply returns the first *top_k* results.
 
         A real implementation would load a cross-encoder model (e.g.
         ``cross-encoder/ms-marco-MiniLM-L-6-v2``) and re-score each result.

@@ -1,4 +1,4 @@
-"""ChunkingEngine — splits documents into chunks using configurable strategies.
+﻿"""ChunkingEngine - splits documents into chunks using configurable strategies.
 
 Strategies:
 - recursive: paragraph → sentence → character splitting with overlap

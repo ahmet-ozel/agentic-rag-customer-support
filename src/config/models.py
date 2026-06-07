@@ -1,4 +1,4 @@
-"""Pydantic configuration models for AgentDesk RAG Platform.
+﻿"""Pydantic configuration models for AgentDesk RAG Platform.
 
 Mirrors the structure of config.yaml exactly.
 """
@@ -204,7 +204,7 @@ class AppSettings(BaseModel):
 
 
 class AppConfig(BaseModel):
-    """Root configuration model — mirrors config.yaml."""
+    """Root configuration model - mirrors config.yaml."""
 
     app: AppSettings = AppSettings()
     llm: LLMConfig = LLMConfig()

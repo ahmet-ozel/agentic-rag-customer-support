@@ -1,4 +1,4 @@
-"""Session Manager — in-memory conversation session management."""
+﻿"""Session Manager - in-memory conversation session management."""
 
 from __future__ import annotations
 

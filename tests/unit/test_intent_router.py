@@ -1,4 +1,4 @@
-"""Unit tests for IntentRouter."""
+﻿"""Unit tests for IntentRouter."""
 
 from __future__ import annotations
 
@@ -110,7 +110,7 @@ class TestClassifyReturnsValidIntent:
 
 
 # ------------------------------------------------------------------
-# Örnek ifade eşleştirme — utterance'lar doğru kategoriye sınıflandırılmalı
+# Örnek ifade eşleştirme - utterance'lar doğru kategoriye sınıflandırılmalı
 # ------------------------------------------------------------------
 
 
@@ -141,7 +141,7 @@ class TestUtteranceMatching:
 
 
 # ------------------------------------------------------------------
-# Chitchat — LLM çağrısı yapmadan önceden tanımlı yanıt
+# Chitchat - LLM çağrısı yapmadan önceden tanımlı yanıt
 # ------------------------------------------------------------------
 
 
