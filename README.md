@@ -64,7 +64,7 @@ User Request
 ### Key Design Decisions
 
 - **Unified LLM Interface:** All LLM providers (vLLM, OpenAI, Anthropic, Google, Ollama) are accessed through a single OpenAI-compatible client
-- **MCP Protocol:** All external I/O is managed through MCP servers - the agent loop stays pure
+- **MCP Protocol:** All external I/O goes through MCP servers, keeping the agent loop pure
 - **Reference Store:** Large tool results are kept in a TTL-based store to prevent token overflow
 - **Config-Driven:** All providers can be swapped via `config.yaml` with no code changes
 - **Tiered LLM:** A cheap model is used for routing and a strong model for response generation, optimizing cost
@@ -76,7 +76,7 @@ User Request
 - **Flexible LLM Backend** - vLLM (local), OpenAI, Anthropic, Google, Ollama; tiered routing for cost optimization
 - **Multiple Vector Stores** - Qdrant (default), extensible to Milvus, Chroma, pgvector
 - **MCP Server Management** - stdio and SSE transport, auto-restart, health monitoring
-- **Document Pipeline** - upload  parse  chunk  embed  store, with configurable chunking strategies
+- **Document Pipeline** - upload -> parse -> chunk -> embed -> store, with configurable chunking strategies
 - **Intent Routing** - TF-IDF semantic classification; chitchat bypasses the agent loop
 - **Session Management** - in-memory conversation history with TTL and message limits
 - **Reference Store** - large tool results stored under a `ref_xxx` key to prevent context overflow
@@ -198,7 +198,7 @@ llm:
 
 ### Database Configuration
 
-AgentDesk supports three different database providers. Select the active one via `config.yaml`  `database.db_provider`.
+AgentDesk supports three different database providers. Select the active one via `config.yaml` `database.db_provider`.
 
 #### Option 1: PostgreSQL (Self-Hosted / Docker)
 
@@ -241,7 +241,7 @@ Setup steps:
 
 1. Create an account at [neon.tech](https://neon.tech)
 2. Create a new project
-3. Dashboard  Connection Details  copy the connection string
+3. Dashboard -> Connection Details -> copy the connection string
 4. Fill in `.env`:
 
 ```bash
@@ -261,7 +261,7 @@ database:
       connection_string: ${NEON_DATABASE_URL}
       ssl_mode: require
 
-# Update MCP servers  -  enable neon_mcp, disable postgres_mcp
+# Update MCP servers: enable neon_mcp, disable postgres_mcp
 mcp_servers:
   postgres_mcp:
     enabled: false
@@ -291,9 +291,9 @@ Setup steps:
 1. Create an account at [supabase.com](https://supabase.com)
 2. Create a new project (choose a region, set a database password)
 3. Collect the required values:
-   - Project Settings  Database  Connection string (Transaction pooler)  `SUPABASE_DATABASE_URL`
-   - Project Settings  API  `service_role` key  `SUPABASE_ACCESS_TOKEN`
-   - Project Settings  General  Reference ID  `SUPABASE_PROJECT_REF`
+   - Project Settings -> Database -> Connection string (Transaction pooler) -> `SUPABASE_DATABASE_URL`
+   - Project Settings -> API -> `service_role` key -> `SUPABASE_ACCESS_TOKEN`
+   - Project Settings -> General -> Reference ID -> `SUPABASE_PROJECT_REF`
 4. Fill in `.env`:
 
 ```bash
@@ -316,7 +316,7 @@ database:
       project_ref: ${SUPABASE_PROJECT_REF}
       ssl_mode: require
 
-# Update MCP servers  -  enable supabase_mcp, disable postgres_mcp
+# Update MCP servers: enable supabase_mcp, disable postgres_mcp
 mcp_servers:
   postgres_mcp:
     enabled: false
@@ -427,16 +427,16 @@ curl http://localhost:8000/api/v1/stats
 ```
 agentdesk/
 ├── src/
-│   ├── agent/          # AgentLoop  -  iterative LLM  MCP tool-call loop
+│   ├── agent/          # AgentLoop: iterative LLM -> MCP tool-call loop
 │   ├── api/            # FastAPI routers (chat, documents, customers, config, stats)
 │   ├── chunking/       # ChunkingEngine (recursive, semantic, document_aware)
 │   ├── config/         # ConfigManager + Pydantic models
-│   ├── llm/            # LLMClient  -  unified OpenAI-compatible interface
-│   ├── mcp/            # MCPManager  -  stdio/SSE lifecycle management
+│   ├── llm/            # LLMClient: unified OpenAI-compatible interface
+│   ├── mcp/            # MCPManager: stdio/SSE lifecycle management
 │   ├── models/         # API request/response schemas
-│   ├── router/         # IntentRouter  -  TF-IDF semantic classification
-│   ├── session/        # SessionManager  -  conversation history
-│   ├── store/          # ReferenceStore  -  TTL-based memory store
+│   ├── router/         # IntentRouter: TF-IDF semantic classification
+│   ├── session/        # SessionManager: conversation history
+│   ├── store/          # ReferenceStore: TTL-based memory store
 │   ├── vectorstore/    # VectorStoreAdapter + QdrantVectorStore
 │   ├── logging_config.py  # Structured logging
 │   └── main.py         # FastAPI application entry point
@@ -534,7 +534,7 @@ make test-int
   - `test_logging_config.py` - Logging setup
 
 - **Integration Tests** (`tests/integration/`): End-to-end flow tests
-  - Chat flow (Intent Router  Agent Loop  LLM  MCP  Response)
+  - Chat flow (Intent Router -> Agent Loop -> LLM -> MCP -> Response)
   - Document processing pipeline
   - Customer query flow
 
@@ -544,9 +544,9 @@ make test-int
 
 | Module | Test Count | Status |
 |-------|-------------|-------|
-| Unit Tests | 216 | Yes Passing |
-| Integration Tests | 8 | Yes Passing |
-| **Total** | **224** | **Yes All Passing** |
+| Unit Tests | 216 | Passing |
+| Integration Tests | 8 | Passing |
+| **Total** | **224** | **All Passing** |
 
 ---
 
